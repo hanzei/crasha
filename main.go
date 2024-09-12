@@ -9,17 +9,21 @@ import (
 )
 
 func init() {
-	rootCmd.Flags().StringArray("state", []string{}, "Filter goroutines by state")
-	rootCmd.Flags().Bool("remove-duplicates", false, "Remove duplicate goroutines")
+	filterCmd.Flags().StringArray("state", []string{}, "Filter goroutines by state")
+	filterCmd.Flags().Bool("remove-duplicates", false, "Remove duplicate goroutines")
+	rootCmd.AddCommand(filterCmd)
+
+	rootCmd.AddCommand(statesCmd)
 }
 
 var rootCmd = &cobra.Command{
 	Use: "crasha",
-	//Short: "Hugo is a very fast static site generator",
-	//Long: `A Fast and Flexible Static Site Generator built with
-	//			  love by spf13 and friends in Go.
-	//			  Complete documentation is available at http://hugo.spf13.com`,
-	Args: cobra.ExactArgs(1),
+}
+
+var filterCmd = &cobra.Command{
+	Use:   "filter",
+	Short: "TODO",
+	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		states, err := cmd.Flags().GetStringArray("state")
 		if err != nil {
@@ -66,6 +70,37 @@ var rootCmd = &cobra.Command{
 
 		for _, st := range sts {
 			fmt.Println(st)
+		}
+		return nil
+	},
+}
+
+var statesCmd = &cobra.Command{
+	Use:   "states",
+	Short: "Extract all goroutine states out of a file",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		file, err := os.Open(args[0])
+		if err != nil {
+			return fmt.Errorf("failed to open file: %w", err)
+		}
+
+		sts, err := Parse(file)
+		if err != nil {
+			return fmt.Errorf("failed to parse file: %w", err)
+		}
+
+		fmt.Printf("Found %d goroutines\n", len(sts))
+
+		var res []string
+		for _, st := range sts {
+			if !slices.Contains(res, st.GoroutineState) {
+				res = append(res, st.GoroutineState)
+			}
+		}
+
+		for _, state := range res {
+			fmt.Println(state)
 		}
 		return nil
 	},
