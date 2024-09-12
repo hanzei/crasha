@@ -1,0 +1,41 @@
+goroutine 1 [running]:
+reflect.mapiternext(0x47d3a9?)
+	/usr/local/go/src/runtime/map.go:1532 +0x13
+reflect.(*MapIter).Next(0xc000143878?)
+	/usr/local/go/src/reflect/value.go:1989 +0x74
+internal/fmtsort.Sort({0x4a6b80?, 0xc00012c120?, 0xc000143ad0?})
+	/usr/local/go/src/internal/fmtsort/sort.go:59 +0x1a7
+fmt.(*pp).printValue(0xc0001325b0, {0x4a6b80?, 0xc00012c120?, 0xc000143b68?}, 0x76, 0x0)
+	/usr/local/go/src/fmt/print.go:816 +0x988
+fmt.(*pp).printArg(0xc0001325b0, {0x4a6b80, 0xc00012c120}, 0x76)
+	/usr/local/go/src/fmt/print.go:759 +0x4bb
+fmt.(*pp).doPrintf(0xc0001325b0, {0x4ba9ac, 0x8}, {0xc000143ef8, 0x1, 0x1})
+	/usr/local/go/src/fmt/print.go:1074 +0x37e
+fmt.Appendf({0xc00014a020, 0x14, 0x20}, {0x4ba9ac, 0x8}, {0xc000143ef8, 0x1, 0x1})
+	/usr/local/go/src/fmt/print.go:249 +0x7a
+main.main.Printf.func3({0xc00014a020?, 0xc000134030?, 0x7a6bda0d4b88?})
+	/usr/local/go/src/log/log.go:398 +0x2c
+log.(*Logger).output(0xc00012c0f0, 0x0, 0x2, 0xc000143f08)
+	/usr/local/go/src/log/log.go:238 +0x352
+log.Printf(...)
+	/usr/local/go/src/log/log.go:397
+main.main()
+	/home/bschumacher/src/tmp/maps/main.go:29 +0x165
+
+goroutine 18 [runnable]:
+main.main.func1()
+	/home/bschumacher/src/tmp/maps/main.go:16 +0x71
+created by main.main in goroutine 1
+	/home/bschumacher/src/tmp/maps/main.go:14 +0x87
+
+goroutine 19 [running]:
+	goroutine running on other thread; stack unavailable
+created by main.main in goroutine 1
+	/home/bschumacher/src/tmp/maps/main.go:22 +0xe7
+
+goroutine 19 [running]:
+main.main.func2()
+	/home/bschumacher/src/tmp/maps/main.go:23 +0x65
+created by main.main in goroutine 1
+	/home/bschumacher/src/tmp/maps/main.go:22 +0xe7
+exit status 2
