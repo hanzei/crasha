@@ -1,29 +1,30 @@
-package main
+package stacktrace_test
 
 import (
 	"strings"
 	"testing"
 
+	"github.com/hanzei/crasha/internal/stacktrace"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestStackTraceEqual(t *testing.T) {
 	for name, tc := range map[string]struct {
-		st1           StackTrace
-		st2           StackTrace
+		st1           stacktrace.StackTrace
+		st2           stacktrace.StackTrace
 		shouldBeEqual bool
 	}{
 		"both empty": {
-			st1:           StackTrace{},
-			st2:           StackTrace{},
+			st1:           stacktrace.StackTrace{},
+			st2:           stacktrace.StackTrace{},
 			shouldBeEqual: true,
 		},
 		"one stack frame": {
-			st1: StackTrace{
+			st1: stacktrace.StackTrace{
 				GoroutineNumber: 1,
 				GoroutineState:  "running",
-				StackFrames: []StackFrame{
+				StackFrames: []stacktrace.StackFrame{
 					{
 						FunctionName: "reflect.mapiternext",
 						FileName:     "/usr/local/go/src/runtime/map.go",
@@ -31,10 +32,10 @@ func TestStackTraceEqual(t *testing.T) {
 					},
 				},
 			},
-			st2: StackTrace{
+			st2: stacktrace.StackTrace{
 				GoroutineNumber: 2,
 				GoroutineState:  "runnable",
-				StackFrames: []StackFrame{
+				StackFrames: []stacktrace.StackFrame{
 					{
 						FunctionName: "reflect.mapiternext",
 						FileName:     "/usr/local/go/src/runtime/map.go",
@@ -54,7 +55,7 @@ func TestStackTraceEqual(t *testing.T) {
 func TestParse(t *testing.T) {
 	t.Run("empty input", func(t *testing.T) {
 		r := strings.NewReader("")
-		st, err := Parse(r)
+		st, err := stacktrace.Parse(r)
 		require.NoError(t, err)
 		require.Len(t, st, 0)
 	})
@@ -85,7 +86,7 @@ main.main()
 	/home/bschumacher/src/tmp/maps/main.go:29 +0x165`
 
 		r := strings.NewReader(input)
-		st, err := Parse(r)
+		st, err := stacktrace.Parse(r)
 		require.NoError(t, err)
 		require.Len(t, st, 1)
 		require.Equal(t, 1, st[0].GoroutineNumber)
@@ -145,7 +146,7 @@ exit status 2
 `
 
 		r := strings.NewReader(input)
-		st, err := Parse(r)
+		st, err := stacktrace.Parse(r)
 		require.NoError(t, err)
 		require.Len(t, st, 4)
 

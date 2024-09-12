@@ -5,6 +5,7 @@ import (
 	"os"
 	"slices"
 
+	"github.com/hanzei/crasha/internal/stacktrace"
 	"github.com/spf13/cobra"
 )
 
@@ -40,7 +41,7 @@ var filterCmd = &cobra.Command{
 			return fmt.Errorf("failed to open file: %w", err)
 		}
 
-		sts, err := Parse(file)
+		sts, err := stacktrace.Parse(file)
 		if err != nil {
 			return fmt.Errorf("failed to parse file: %w", err)
 		}
@@ -85,7 +86,7 @@ var statesCmd = &cobra.Command{
 			return fmt.Errorf("failed to open file: %w", err)
 		}
 
-		sts, err := Parse(file)
+		sts, err := stacktrace.Parse(file)
 		if err != nil {
 			return fmt.Errorf("failed to parse file: %w", err)
 		}
