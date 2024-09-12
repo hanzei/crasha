@@ -116,8 +116,12 @@ func parseGoroutine(s *bufio.Scanner) (*StackTrace, error) {
 
 			state = stateFunctionName
 		case stateFunctionName:
-			functionName, _, _ := strings.Cut(line, "(0x")
-			functionName = strings.TrimRight(functionName, "()")
+			functionName := strings.TrimSuffix(line, "(...)")
+			functionName = strings.TrimSuffix(functionName, "()")
+			functionName, _, _ = strings.Cut(functionName, "(0x")
+			functionName, _, _ = strings.Cut(functionName, "({0x")
+			functionName, _, _ = strings.Cut(functionName, "({{0x")
+
 			st.StackFrames = append(st.StackFrames, StackFrame{FunctionName: functionName})
 
 			state = stateFileLine
